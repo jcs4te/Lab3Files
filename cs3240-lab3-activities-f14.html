@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Lab on Persistent Data</title>
+</head>
+<body>
+<h2>CS3240, Lab 3, Fall 2014<br>
+Lab on Persistent Data</h2>
+Note:&nbsp; I've included the info from the Reading assignment that you
+were to complete before coming to lab in this document.&nbsp; You can
+skip to the end to start the activities.&nbsp; But the Readings info is
+included if you need to refer back to what you looked at.<br>
+<br>
+<h3>1. Readings before Lab<br>
+</h3>
+Read the following before coming to lab.&nbsp; Lab will involve
+exercises based on the concepts and techniques shown in these
+reading.&nbsp; So you don't have to know everything in the readings
+perfectly before lab, nor do you have to try out any coding. But
+knowing the concepts and ideas beforehand is necessary to complete the
+exercises in lab on Monday.<br>
+<br>
+<span style="font-weight: bold;">(A) File I/O:&nbsp; </span>Read
+through a tutorial on file I/O, for example <a
+ href="http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files">this</a>
+from the Python tutorial.&nbsp;&nbsp; (We don't think you'll need to
+know much at this time about the binary modes for Windows. But if
+you're a Windows user,
+you may need to come back to this later.)&nbsp; What you should
+understand is:<br>
+<ol>
+  <li>How to open a file for reading and writing.</li>
+  <li>How to use the <span style="font-weight: bold;">with</span>
+statement for files and why.</li>
+  <li>How to read a file line by line and process it.</li>
+</ol>
+(B)&nbsp; <span style="font-weight: bold;">JSON:&nbsp; </span>This
+stands for
+JavaScript Object Notation, and this has become a very popular way of
+encoding object data for persisentence or interchange with other
+programs (even in other languages). All major languages have nice JSON
+libraries.&nbsp; <a
+ href="http://en.wikipedia.org/wiki/JSON#Data_types.2C_syntax_and_example">This
+section</a> of the Wikipedia article on JSON shows an example of
+something stored in JSON format.&nbsp; Note that JSON has the idea of
+an <span style="font-style: italic;">Object</span>, which is key-value
+pairs surrounded by curly-brackets (so it's a lot like a Python
+dictionary), and an Array, which is a sequence of items surrounded by
+square-brackets (like a Python list).&nbsp; So you already speak JSON!<br>
+<br>
+Python has a module json <a
+ href="http://docs.python.org/2/library/json.html">documented here</a>
+for serializing and de-serializing data. Glance at this, but you don't
+need to learn this in detail before lab.<br>
+<br>
+<span style="font-weight: bold;">(C)&nbsp;&nbsp; Databases and SQL:</span><br>
+Databases provide a way to store large amounts of data, process it
+efficiently and with flexibility, and share the data among users. The <span
+ style="font-weight: bold;">SQL</span> is a standard query language for
+interacting with <span style="font-weight: bold;">relational databases</span>,
+which is a approach to organizing a database as a set of <span
+ style="font-weight: bold;">tables</span> that store information in <span
+ style="font-weight: bold;">rows</span> and <span
+ style="font-weight: bold;">columns</span>.&nbsp; A row typically
+stores data for one "entry", while the columns correspond to particular
+attributes.<br>
+<br>
+There are many database products that implement SQL.&nbsp; Many of
+these run as a <span style="font-weight: bold;">database server</span>,
+an application running on a networked machine that client code can
+connect to. These include MySQL, Postgres, and many others. <br>
+<br>
+Another approach is to use an <span style="font-style: italic;">embedded</span>
+database system, where the database is running on the same machine as
+the application and does not run as a separate server process.&nbsp; We
+will go that route in today's lab, using a database implementation
+called <span style="font-weight: bold;">sqlite3</span>, which comes
+installed with Python.&nbsp; You can start up sqlite3 from the command
+line and enter commands into its comand-line interpreter (CLI), just
+like you can do with Python and other interpreted languages.&nbsp; This
+is a good way to create databases, create tables, see the state of the
+database, etc.&nbsp; But you can also write a Python program that
+connects to a database, reads or modifies data, performs searches and
+other operations.<br>
+<br>
+There's a lot to learn about SQL and databases (we have a entire course
+on it), but today we want to give you a taste.<br>
+<br>
+<span style="font-weight: bold;">(D) sqlite3 and Python</span>:<br>
+<br>
+Windows users:&nbsp; You almost certainly need to install sqlite to use
+it.&nbsp; See the instructions <a
+ href="http://www.tutorialspoint.com/sqlite/sqlite_installation.htm">here</a>.<br>
+Ubuntu users:&nbsp; You may need to use apt-get to install it.<br>
+Mac users:&nbsp; It should come already installed.<br>
+<br>
+Here are links to some short tutorials on using sqlite3 with Python:<br>
+<ol>
+  <li><a
+ href="http://www.openbookproject.net/courses/python4fun/sqlschool.html">http://www.openbookproject.net/courses/python4fun/sqlschool.html</a><br>
+  </li>
+  <li><a href="http://zetcode.com/db/sqlitepythontutorial/">http://zetcode.com/db/sqlitepythontutorial/</a></li>
+</ol>
+The first of these does a nice job of focusing on using sqlite3 from
+the CLI, including creating databases and tables and putting info into
+a database.&nbsp; From it you'll see the syntax of some basic commands
+in SQL.<br>
+<br>
+The second of these does a better job of showing you how to use sqlite3
+from within Python to access data in the database.&nbsp; To do that,
+you'll need to know about the SQL commands of course, since in Python
+you make calls to functions and pass an SQL command as an argument.<br>
+<p>
+</p>
+<h3>
+2. Lab Activities</h3>
+<p>
+Look for files in the Resources area of Collab, in the Lab 3 section.<br>
+</p>
+Our goal in lab today is to process a large file of information by
+loading it
+into a database and the executing queries on it to carry out operations.<br>
+<p>
+We have a file in CSV format, and to input that into the database,
+you'd need to explore Python's module for processing CSV files.&nbsp;
+(It's pretty nice and simple.)<br>
+</p>
+<p>In Collab Resources you will find a data file called <b>seas-courses-5years.csv</b>
+that has these columns:<br>
+<code>deptID&nbsp;&nbsp;&nbsp; courseNum&nbsp;&nbsp;&nbsp;
+semester&nbsp;&nbsp;&nbsp; meetingType&nbsp;&nbsp;&nbsp;
+seatsTaken&nbsp;&nbsp;&nbsp; seatsOffered&nbsp;&nbsp;&nbsp; instructor</code><br>
+This data is enrollment information for courses taught in SEAS over
+five years.<br>
+</p>
+<p>You'd need to create a database and a table for this info <span
+ style="font-weight: bold;">outside of Python</span> before running any
+program.&nbsp; A common technique is to create a shell script (Unix) or
+.BAT file (Windows) that does this so you can run and re-run
+this.&nbsp; It might look something like the following (and this file
+is on Collab), and can be used
+in Unix and Windows by typing: sqlite3 crawled.db &lt; create_table.sql</p>
+<p>The following shows you want this might look like, but this is not
+complete, i.e. it does not match the columns listed above.&nbsp; (We've
+given you a correct version in the Resources area of Collab.)<br>
+</p>
+<pre>DROP TABLE IF EXISTS coursedata;<br>CREATE TABLE coursedata (deptID text, seatsTaken int);<br></pre>
+<p>
+Then write a Python program that:<br>
+</p>
+<ol>
+  <li>Reads the data from the file and puts it into the database;</li>
+  <li>Finds all records for CS courses, and</li>
+  <li>Creates a dictionary that records how many students each
+instructor taught, and</li>
+  <li>Creates a 2nd dictionary that records how many students enrolled
+in each unique CS class.</li>
+  <li>If you have time, update your program so it prompts for a deptID
+and then does this processing for that department (not just CS).<br>
+  </li>
+</ol>
+Feel free to do some kind of variation on this.<br>
+<p><b>Note: How to read data?</b>&nbsp; Python has a module for working
+with CSV
+files.&nbsp; Search http://docs.python.org/ for info on the csv module.
+You'll need to open the file in "universal new-line mode" as follows:
+</p>
+<pre>with open('seas-courses-5years.csv', 'rU') as csvfile:<br></pre>
+<p><b>Note: How to embed SQL in a Python program?</b>&nbsp; You need to
+know how to do this correctly, or security issues can follow.&nbsp; Use
+Google to find a discussion of how to do this, and then see the .py
+file in the Collab Resources area for examples. Study this and make
+your code follow good practice.<br>
+</p>
+<h3>3. Submission</h3>
+Submit what files you have at the end of the lab.&nbsp; In the text box
+for the submission, briefly state how much you got done, what you feel
+like you didn't learn well, etc.<br>
+<br>
+</body>
+</html>
